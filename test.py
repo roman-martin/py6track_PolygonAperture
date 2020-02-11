@@ -30,23 +30,59 @@ mypolygon = np.array([  [	0.053833780684895	,	-0.030413209559333	],
                         [	0.03024129086024	,	-0.003305786029378	],
                         [	0.054691684591845	,	-0.007933897425978	]]
                    ).transpose()
+#mypolygon = [[-0.05,  0.06,  0.06, -0.05], [ 0.03,  0.03, -0.03, -0.03]]
+#mypolygon = np.array([[-0.05,  0.06,  0.06, -0.05], [ 0.03,  0.03, -0.03, -0.03]])
 
 aper_elem = py6track_PolygonAperture.LimitPolygon(aperture = mypolygon)
-
 N_part = 20000
-p = pysixtrack.Particles()
-p.x = np.random.uniform(low=-8.5e-2, high=8.5e-2, size=N_part)
-p.y = np.random.uniform(low=-8.5e-2, high=8.5e-2, size=N_part)
-p.state = np.ones_like(p.x, dtype=np.int)
-
-aper_elem.track(p)
 
 
-fig, ax = plt.subplots(1)
-ax.scatter(p.x, p.y, color='r', s=2)
-ax.scatter(p.lost_particles[0].x, p.lost_particles[0].y, color='gray', s=2)
 
-ax.plot(mypolygon[0], mypolygon[1], color='k')
-ax.plot([mypolygon[0,-1], mypolygon[0,0]], [mypolygon[1,-1],mypolygon[1,0]], color='k')
+#----Test scalar----------------------------------------
+p_scalar = pysixtrack.Particles()
+passed_particles_x = []
+passed_particles_y = []
+lost_particles_x = []
+lost_particles_y = []
+for n in range(N_part):
+    p_scalar.x = (np.random.rand()-0.5) * 2.*8.5e-2
+    p_scalar.y = (np.random.rand()-0.5) * 2.*8.5e-2
+    p_scalar.state = 1
 
-#fig.savefig('polygonAperture_test.pdf', bbox_inches='tight')
+    aper_elem.track(p_scalar)
+    if p_scalar.state == 1:
+        passed_particles_x += [p_scalar.x]
+        passed_particles_y += [p_scalar.y]
+    else:
+        lost_particles_x += [p_scalar.x]
+        lost_particles_y += [p_scalar.y]
+
+
+#----Test vector----------------------------------------
+p_vec = pysixtrack.Particles()
+p_vec.x = np.random.uniform(low=-8.5e-2, high=8.5e-2, size=N_part)
+p_vec.y = np.random.uniform(low=-8.5e-2, high=8.5e-2, size=N_part)
+p_vec.state = np.ones_like(p_vec.x, dtype=np.int)
+
+aper_elem.track(p_vec)
+
+
+
+
+#----Plots----------------------------------------------
+fig, (ax_scalar, ax_vec) = plt.subplots(2,1)
+ax_scalar.scatter(passed_particles_x, passed_particles_y, color='r', s=2)
+ax_scalar.scatter(lost_particles_x, lost_particles_y, color='gray', s=2)
+ax_vec.scatter(p_vec.x, p_vec.y, color='r', s=2)
+ax_vec.scatter(p_vec.lost_particles[0].x, p_vec.lost_particles[0].y, color='gray', s=2)
+
+ax_scalar.plot(mypolygon[0], mypolygon[1], color='k')
+ax_scalar.plot([mypolygon[0,-1], mypolygon[0,0]], [mypolygon[1,-1],mypolygon[1,0]], color='k')
+ax_scalar.set_title('Scalar')
+ax_scalar.label_outer()
+ax_vec.plot(mypolygon[0], mypolygon[1], color='k')
+ax_vec.plot([mypolygon[0,-1], mypolygon[0,0]], [mypolygon[1,-1],mypolygon[1,0]], color='k')
+ax_vec.set_title('Vector')
+
+
+fig.savefig('polygonAperture_test.pdf', bbox_inches='tight')
