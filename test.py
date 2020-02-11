@@ -2,6 +2,7 @@ import numpy as np
 import pysixtrack
 import py6track_PolygonAperture
 import matplotlib.pyplot as plt
+from mpmath import mp
 
 mypolygon = np.array([  [	0.053833780684895	,	-0.030413209559333	],
                         [	0.003217156976424	,	-0.011239656066678	],
@@ -65,6 +66,22 @@ p_vec.state = np.ones_like(p_vec.x, dtype=np.int)
 aper_elem.track(p_vec)
 
 
+#----Test mpmath compatibility--------------------------
+p_mp = pysixtrack.Particles()
+p_mp.x = mp.mpf(0.02)
+p_mp.y = mp.mpf(0.01)
+p_mp.state = 1
+precision_polygon = [[mp.mpf(-0.03),mp.mpf(0.03),mp.mpf(0.03),mp.mpf(-0.03)],
+                     [mp.mpf(0.04),mp.mpf(0.04), mp.mpf(-0.04),mp.mpf(-0.04)]]
+precize_aper_elem = py6track_PolygonAperture.LimitPolygon(aperture = precision_polygon)
+
+precize_aper_elem.track(p_mp)
+assert p_mp.state == 1
+p_mp.x = mp.mpf(0.05)
+p_mp.y = mp.mpf(0.01)
+p_mp.state = 1
+precize_aper_elem.track(p_mp)
+assert p_mp.state == 0
 
 
 #----Plots----------------------------------------------
