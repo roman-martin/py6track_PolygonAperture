@@ -1,5 +1,5 @@
 import numpy as np
-from operator import lt, add, sub, mul
+from operator import sub, mul
 from pysixtrack.elements import Element
 
 class LimitPolygon(Element):

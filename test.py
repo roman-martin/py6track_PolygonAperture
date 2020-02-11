@@ -30,8 +30,6 @@ mypolygon = np.array([  [	0.053833780684895	,	-0.030413209559333	],
                         [	0.03024129086024	,	-0.003305786029378	],
                         [	0.054691684591845	,	-0.007933897425978	]]
                    ).transpose()
-#mypolygon = [[-0.05,  0.06,  0.06, -0.05], [ 0.03,  0.03, -0.03, -0.03]]
-#mypolygon = np.array([[-0.05,  0.06,  0.06, -0.05], [ 0.03,  0.03, -0.03, -0.03]])
 
 aper_elem = py6track_PolygonAperture.LimitPolygon(aperture = mypolygon)
 N_part = 20000
@@ -83,6 +81,5 @@ ax_scalar.label_outer()
 ax_vec.plot(mypolygon[0], mypolygon[1], color='k')
 ax_vec.plot([mypolygon[0,-1], mypolygon[0,0]], [mypolygon[1,-1],mypolygon[1,0]], color='k')
 ax_vec.set_title('Vector')
-
 
 fig.savefig('polygonAperture_test.pdf', bbox_inches='tight')
