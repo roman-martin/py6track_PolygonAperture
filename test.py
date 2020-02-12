@@ -68,7 +68,8 @@ aper_elem.track(p_vec)
 
 #----Test mpmath compatibility--------------------------
 p_mp = pysixtrack.Particles()
-p_mp.x = mp.mpf(0.02)
+mp.dps = 25
+p_mp.x = mp.mpf(0.03) - mp.mpf(1e-27)
 p_mp.y = mp.mpf(0.01)
 p_mp.state = 1
 polygon_mp = [[mp.mpf(-0.03),mp.mpf(0.03),mp.mpf(0.03),mp.mpf(-0.03)],
@@ -77,11 +78,12 @@ aper_elem_mp = py6track_PolygonAperture.LimitPolygon(aperture = polygon_mp)
 
 aper_elem_mp.track(p_mp)
 assert p_mp.state == 1
-p_mp.x = mp.mpf(0.05)
+p_mp.x = mp.mpf(0.03) + mp.mpf(1e-27)
 p_mp.y = mp.mpf(0.01)
 p_mp.state = 1
 aper_elem_mp.track(p_mp)
 assert p_mp.state == 0
+
 
 
 #----Plots----------------------------------------------
