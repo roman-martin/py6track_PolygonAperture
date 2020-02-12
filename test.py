@@ -71,16 +71,16 @@ p_mp = pysixtrack.Particles()
 p_mp.x = mp.mpf(0.02)
 p_mp.y = mp.mpf(0.01)
 p_mp.state = 1
-precision_polygon = [[mp.mpf(-0.03),mp.mpf(0.03),mp.mpf(0.03),mp.mpf(-0.03)],
-                     [mp.mpf(0.04),mp.mpf(0.04), mp.mpf(-0.04),mp.mpf(-0.04)]]
-precize_aper_elem = py6track_PolygonAperture.LimitPolygon(aperture = precision_polygon)
+polygon_mp = [[mp.mpf(-0.03),mp.mpf(0.03),mp.mpf(0.03),mp.mpf(-0.03)],
+              [mp.mpf(0.04),mp.mpf(0.04), mp.mpf(-0.04),mp.mpf(-0.04)]]
+aper_elem_mp = py6track_PolygonAperture.LimitPolygon(aperture = polygon_mp)
 
-precize_aper_elem.track(p_mp)
+aper_elem_mp.track(p_mp)
 assert p_mp.state == 1
 p_mp.x = mp.mpf(0.05)
 p_mp.y = mp.mpf(0.01)
 p_mp.state = 1
-precize_aper_elem.track(p_mp)
+aper_elem_mp.track(p_mp)
 assert p_mp.state == 0
 
 
